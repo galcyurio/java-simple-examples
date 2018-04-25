@@ -21,8 +21,12 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "com.squareup.okhttp3:okhttp:3.10.0"
+    compile "com.squareup.retrofit2:retrofit:2.4.0"
+    compile "com.squareup.retrofit2:converter-scalars:2.4.0"
+    compile "com.squareup.retrofit2:converter-jackson:2.4.0"
 
     testCompile 'com.squareup.okhttp3:mockwebserver:3.10.0'
+    testCompile 'com.squareup.retrofit2:retrofit-mock:2.4.0'
 }
 
 compileKotlin {

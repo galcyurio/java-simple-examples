@@ -2,6 +2,9 @@ import okhttp3.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Test
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.io.File
 import java.io.IOException
 import java.util.*
 
@@ -73,4 +76,24 @@ class Tester {
         println("--body \n${response.body()!!.string()}")
     }
 
+    @Test
+    fun `Retrofit & OkHttp MockWebServer 예제`() {
+        val server = MockWebServer()
+        server.enqueue(MockResponse().apply {
+            setResponseCode(200)
+
+            val uri = this.javaClass.classLoader.getResource("github-users.json").toURI()
+            setBody(File(uri).readText())
+        })
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(server.url(""))
+//            .baseUrl("https://api.github.com")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+
+        val request = retrofit.create(GitHubRequest::class.java)
+        val response = request.users().execute()
+        println(response.body())
+    }
 }
