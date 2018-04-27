@@ -2,6 +2,7 @@ group 'com.github.galcyurio'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 sourceCompatibility = 1.8
 
@@ -14,14 +15,18 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-jar {
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
+mainClassName = 'com.github.galcyurio.HelloWorld'
+
+task copyLicense {
+    outputs.file new File("$buildDir/LICENSE")
+    doLast {
+        copy {
+            from "LICENSE"
+            into "$buildDir"
         }
     }
+}
 
-    manifest {
-        attributes "Main-Class": "com.github.galcyurio.HelloWorld"
-    }
+applicationDistribution.from(copyLicense) {
+    into ""
 }
